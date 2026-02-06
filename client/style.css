@@ -1,0 +1,319 @@
+/* :root {
+  --bg: #070a07;
+  --phosphor: #78ff9a;
+  --phosphor-dim: rgba(120, 255, 154, 0.65);
+  --glow: rgba(120, 255, 154, 0.22);
+  --screen-radius: 10px;
+} */
+
+:root {
+  --bg: #070604;
+  --phosphor: #ffb14a;
+  --phosphor-dim: rgba(255, 177, 74, 0.65);
+  --glow: rgba(255, 160, 60, 0.28);
+  --screen-radius: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  position: relative;
+  overflow-x: hidden;
+  background: radial-gradient(1100px 650px at 50% 30%, #0c120c, #050705);
+  color: var(--phosphor);
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+}
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+
+  /* Subtle scanlines on the page background, fatso */
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22),
+    rgba(0, 0, 0, 0.22) 1px,
+    rgba(0, 0, 0, 0) 7px,
+    rgba(0, 0, 0, 0) 11px
+  );
+
+  opacity: 0.18;
+  mix-blend-mode: normal;
+}
+
+.frame {
+  width: min(920px, 92vw);
+}
+
+.frame {
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  margin: 0 0 14px 0;
+  text-align: center;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  font-weight: 700;
+  font-size: clamp(18px, 2.4vw, 26px);
+  color: rgba(120, 255, 154, 0.85);
+  text-shadow:
+    0 0 10px rgba(120, 255, 154, 0.22),
+    0 0 22px rgba(120, 255, 154, 0.12);
+  user-select: none;
+}
+
+/* CRT jitter vibe shite */
+.title {
+  transform: translateZ(0);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .title {
+    animation: titleFlicker 5.5s infinite;
+  }
+}
+
+@keyframes titleFlicker {
+  0%,
+  100% {
+    opacity: 0.92;
+    filter: brightness(1) contrast(1.05);
+  }
+  3% {
+    opacity: 0.75;
+  }
+  4% {
+    opacity: 0.95;
+  }
+  9% {
+    opacity: 0.85;
+  }
+}
+
+.crt {
+  padding: 26px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #1a1f1a, #0c0f0c);
+  box-shadow:
+    0 30px 80px rgba(0, 0, 0, 0.65),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.bezel {
+  border-radius: 14px;
+  background: #040604;
+  padding: 18px;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.04);
+}
+
+/* Actual tough guy display area */
+.screen {
+  height: 60vh;
+  min-height: 420px;
+  padding: 16px 14px;
+  overflow: auto;
+  line-height: 1.35;
+
+  color: var(--phosphor);
+  text-shadow: 0 0 14px var(--glow);
+
+  position: relative;
+
+  /* Fix corner issues: clip overlays to rounded screen corners */
+  border-radius: var(--screen-radius);
+  background: #050807;
+}
+
+/* Hide scrollbar but keep on scrolling.... */
+.screen {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* old Edge/IE */
+}
+
+.screen::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.line {
+  white-space: pre-wrap;
+  margin: 0 0 10px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.screen .line:first-child {
+  padding-top: 6px;
+}
+.screen > .line:first-child {
+  padding-top: 6px;
+}
+
+.line--dim {
+  color: var(--phosphor-dim);
+}
+
+.prompt {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px 2px 14px;
+  border-top: 1px solid rgba(120, 255, 154, 0.15);
+}
+
+.prompt__sig {
+  color: var(--phosphor-dim);
+}
+
+.prompt__input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--phosphor);
+  font: inherit;
+  caret-color: var(--phosphor);
+}
+
+/* ---------------------------
+   FX LAYER (on .screen)
+   This fixes the pain in the ass rounded corners
+---------------------------- */
+
+.screen.fx {
+  overflow: hidden; /* clip ::before/::after to border-radius */
+  animation: flicker 3.5s infinite;
+}
+
+/* scanlines */
+.screen.fx::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.035),
+    rgba(255, 255, 255, 0.035) 1px,
+    rgba(0, 0, 0, 0) 3px,
+    rgba(0, 0, 0, 0) 6px
+  );
+
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+}
+
+/* static noise + vignette */
+.screen.fx::after {
+  content: '';
+  position: absolute;
+  inset: -20%;
+  pointer-events: none;
+  border-radius: calc(var(--screen-radius) + 20px);
+
+  background-image:
+    radial-gradient(
+      900px 500px at 50% 35%,
+      rgba(120, 255, 154, 0.08),
+      rgba(0, 0, 0, 0.45)
+    ),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E");
+
+  background-repeat: no-repeat, repeat;
+  background-size: cover, auto;
+
+  opacity: 0.12;
+  mix-blend-mode: screen;
+
+  animation: noiseShift 6.5s steps(1) infinite;
+}
+
+@keyframes noiseShift {
+  /* still most of the time */
+  0%,
+  92%,
+  100% {
+    transform: translate(0, 0);
+  }
+
+  /* quick vibration burst near the end of the cycle */
+  93% {
+    transform: translate(-0.6%, 0.3%);
+  }
+  94% {
+    transform: translate(0.5%, -0.2%);
+  }
+  95% {
+    transform: translate(-0.4%, 0.2%);
+  }
+  96% {
+    transform: translate(0.3%, -0.1%);
+  }
+  97% {
+    transform: translate(-0.2%, 0.1%);
+  }
+  98% {
+    transform: translate(0.15%, -0.05%);
+  }
+  99% {
+    transform: translate(-0.1%, 0.05%);
+  }
+}
+
+/* Subtle brightness flicker */
+@keyframes flicker {
+  0%,
+  100% {
+    filter: brightness(1) contrast(1.05);
+  }
+  2% {
+    filter: brightness(1.25) contrast(1.2);
+  }
+  3% {
+    filter: brightness(0.85) contrast(1.05);
+  }
+  5% {
+    filter: brightness(1.1) contrast(1.15);
+  }
+  8% {
+    filter: brightness(0.95) contrast(1.05);
+  }
+}
+
+/* Random glitch bursts (JS toggles .glitch on #screen) */
+.screen.fx.glitch {
+  filter: brightness(1.35) contrast(1.35) saturate(1.2);
+}
+
+.screen.fx.glitch::after {
+  opacity: 0.22;
+}
+
+.title {
+  font-family: 'Audiowide', sans-serif;
+  font-size: 2rem;
+}
+
+.screen {
+  padding-top: 22px;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+}

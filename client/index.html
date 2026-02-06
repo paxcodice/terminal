@@ -1,0 +1,44 @@
+<!-- YOU'RE FAT -->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIG IN THE MACHINE</title>
+    <link rel="stylesheet" href="./style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Audiowide&family=Share+Tech+Mono&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <main class="frame">
+      <h1 class="title" aria-label="Pig in the Machine">PIG IN THE MACHINE</h1>
+      <section class="crt" aria-label="Pig terminal">
+        <div class="bezel">
+          <div
+            id="screen"
+            class="screen fx"
+            role="log"
+            aria-live="polite"
+          ></div>
+
+          <form id="prompt" class="prompt" autocomplete="off">
+            <span class="prompt__sig">guest@pig:~$</span>
+            <input
+              id="input"
+              class="prompt__input"
+              type="text"
+              spellcheck="false"
+              autofocus
+            />
+          </form>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
